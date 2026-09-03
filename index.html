@@ -48,6 +48,14 @@ body{font-family:var(--sans);background:#dfe3ea;display:grid;place-items:center;
 .phone.at-start .progress{opacity:0}
 .seg{flex:1;height:4px;border-radius:2px;background:#dcdfe5;overflow:hidden}
 .seg i{display:block;height:100%;width:0;background:#0c1422;border-radius:2px;transition:width .34s cubic-bezier(.3,.8,.3,1)}
+.back-btn{
+  position:absolute;top:78px;left:22px;z-index:45;width:34px;height:34px;border:0;background:none;padding:0;
+  display:grid;place-items:center;cursor:pointer;border-radius:50%;
+  opacity:0;visibility:hidden;transition:opacity .25s ease;
+}
+.back-btn.on{opacity:1;visibility:visible}
+.back-btn:active{transform:scale(.92)}
+.back-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .close{
   position:absolute;top:78px;right:22px;z-index:45;width:34px;height:34px;border:0;background:none;padding:0;
   display:grid;place-items:center;cursor:pointer;color:var(--ink);border-radius:50%;
@@ -143,6 +151,13 @@ h1{font-family:var(--serif);font-size:26px;line-height:1.2;font-weight:400;lette
 .s1-cta .btn{pointer-events:none}
 .s1-cta.show{opacity:1;transform:none}
 .s1-cta.show .btn{pointer-events:auto}
+.next-bar{
+  position:absolute;left:0;right:0;bottom:0;z-index:28;padding:12px 26px 24px;
+  background:linear-gradient(to top,#fff 58%,rgba(255,255,255,.94) 80%,rgba(255,255,255,0));
+  display:none;
+}
+.phone.has-next .next-bar{display:block}
+.next-bar .btn{box-shadow:0 8px 22px -12px rgba(20,40,90,.55)}
 
 
 /* wins block, for members already succeeding */
@@ -616,6 +631,9 @@ h2,h3,h4,.rc-title,.act-block h2,.tile p,.rsheet h2,.coach-body h2{
 
   <div class="progress" id="progress"></div>
 
+  <button class="back-btn" id="backBtn" aria-label="Previous screen">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0c1422" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 4L7.5 12l8 8"/></svg>
+  </button>
   <button class="close" id="close" aria-label="Close recap">
     <svg width="17" height="17" viewBox="0 0 17 17"><path d="M1 1l15 15M16 1L1 16" stroke="#0c1422" stroke-width="1.7" stroke-linecap="round"/></svg>
   </button>
@@ -631,12 +649,7 @@ h2,h3,h4,.rc-title,.act-block h2,.tile p,.rsheet h2,.coach-body h2{
           <p class="week up d2" id="week"></p>
           <p class="headline up d3" id="headline"></p>
           <p class="reassure up d4" id="reassure"></p>
-          <div class="scroll-hint up d5" id="scrollHint">
-            <button class="chev-chip" id="scrollDown" aria-label="Scroll to your swaps">
-              <svg width="20" height="13" viewBox="0 0 20 13" fill="none" stroke="#0052cc" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2.5l8 8 8-8"/></svg>
-            </button>
-            <p class="scroll-cue" id="scrollCue"></p>
-          </div>
+          <button class="btn btn-secondary up d5" id="suggestionsBtn" style="margin-top:40px;max-width:200px">See recipes</button>
         </div>
 
         <div class="act-block" id="actBlock">
@@ -649,6 +662,13 @@ h2,h3,h4,.rc-title,.act-block h2,.tile p,.rsheet h2,.coach-body h2{
       <div class="s1-cta">
         <button class="btn btn-primary" id="learnWhy"></button>
       </div>
+    </section>
+
+    <section class="slide" id="s2">
+      <h1 class="up d1" id="weightTitle"></h1>
+      <p class="sub up d2" id="weightSub"></p>
+      <div class="tiles up d3" id="tiles"></div>
+      <div class="chart up d4 trend" id="trend"></div>
     </section>
 
     <section class="slide" id="s5">
@@ -665,27 +685,6 @@ h2,h3,h4,.rc-title,.act-block h2,.tile p,.rsheet h2,.coach-body h2{
 
       <p class="chips-label" id="chipsLabel"></p>
       <div class="chips" id="chips"></div>
-    </section>
-
-    <section class="slide" id="s3">
-      <h1 class="up d1" id="carbsTitle"></h1>
-      <p class="sub up d2" id="carbsSub"></p>
-
-      <div class="carbs up d3">
-        <div class="chart-tip"></div>
-        <div class="scrub-guide"></div>
-        <div class="key key-top">
-          <div class="key-row">
-            <span><i style="background:#8f93ea"></i>3+ meals logged</span>
-            <span><i style="background:#f4f5fe;border:1.5px solid #c9cbf7"></i>Under 3 meals</span>
-          </div>
-        </div>
-        <div class="plot">
-          <div class="target" id="target"><span id="targetLabel"></span></div>
-          <div class="bars" id="bars"></div>
-        </div>
-        <div class="xaxis" id="xaxis"></div>
-      </div>
     </section>
 
     <section class="slide" id="s9">
@@ -764,13 +763,6 @@ h2,h3,h4,.rc-title,.act-block h2,.tile p,.rsheet h2,.coach-body h2{
       </div>
     </section>
 
-    <section class="slide" id="s2">
-      <h1 class="up d1" id="weightTitle"></h1>
-      <p class="sub up d2" id="weightSub"></p>
-      <div class="tiles up d3" id="tiles"></div>
-      <div class="chart up d4 trend" id="trend"></div>
-    </section>
-
     <section class="slide" id="s7">
       <h1 class="up d1" id="dualTitle"></h1>
       <p class="sub up d2" id="dualSub"></p>
@@ -843,6 +835,10 @@ h2,h3,h4,.rc-title,.act-block h2,.tile p,.rsheet h2,.coach-body h2{
       </div>
       <div class="s6-cta"><div class="sum-btns" id="sumBtns"></div></div>
     </section>
+  </div>
+
+  <div class="next-bar">
+    <button class="btn btn-primary" id="nextBtn">Next</button>
   </div>
 
   <div class="rscrim" id="rscrim"></div>
@@ -1213,8 +1209,6 @@ document.getElementById('avatarSlot').innerHTML = AVATAR(46);
 document.getElementById('week').textContent = DATA.week;
 document.getElementById('headline').innerHTML =
   DATA.headline.replace('{', '<em>').replace('}', '</em>');
-document.getElementById('carbsTitle').textContent = DATA.carbsTitle;
-document.getElementById('carbsSub').textContent = DATA.carbsSub;
 document.getElementById('patternsTitle').textContent = DATA.patternsTitle || 'Top carb patterns';
 
 document.getElementById('weightTitle').textContent = DATA.weightTitle || 'How this affects your weight';
@@ -1222,11 +1216,22 @@ document.getElementById('weightSub').textContent = DATA.weightSub ||
   'Day-to-day changes are normal. Look at your overall trend  to see your progress over time.';
 const reassureEl = document.getElementById('reassure');
 DATA.reassure ? reassureEl.textContent = DATA.reassure : reassureEl.remove();
-document.getElementById('scrollCue').textContent = DATA.scrollCue || 'Scroll for your swaps';
 document.getElementById('learnWhy').textContent = DATA.ctaLabel || 'See your numbers';
 document.getElementById('actTitle').textContent = DATA.actionTitle;
 document.getElementById('actSub').textContent = DATA.actionSub;
 
+// Initialize recipe suggestions sheet
+document.getElementById('rsheetTitle').textContent = DATA.actionTitle;
+document.getElementById('rsheetSub').textContent = DATA.actionSub;
+
+/* swap cards - declare early */
+const ALL_SWAPS = [...DATA.swaps, ...(DATA.swapsAlt || [])];
+const saved = new Set();
+const findSwap = n => ALL_SWAPS.find(s => s.name === n);
+
+if(DATA.swaps && DATA.swaps.length) {
+  renderCards(DATA.swaps, document.getElementById('sumCards'));
+}
 
 const BOLT_ASK = `<svg width="18" height="20" viewBox="0 0 18 20" fill="none" stroke="#2fa079" stroke-width="1.8" stroke-linejoin="round"><path d="M10.4 1L3 10.6h4.2l-.7 8.4L15 8.6h-4.6L10.4 1z"/></svg>`;
 
@@ -1459,11 +1464,6 @@ function drawCarbs(ids){
     return `<b>${d.v}g carbs</b><span>${d.label} · ${d.logs} meal log${d.logs===1?'':'s'}</span>${kLine}`;
   });
 }
-if(DATA.carbs){
-  drawCarbs({target:'target', label:'targetLabel', bars:'bars', axis:'xaxis'});
-} else {
-  document.getElementById('s3').remove();
-}
 
 /* the paired screen adds the readings under the same days */
 if(DATA.ketoneDays && DATA.carbs){
@@ -1557,9 +1557,6 @@ function ringPlay(){
 
 /* swap cards */
 const cardsEl = document.getElementById('cards');
-const ALL_SWAPS = [...DATA.swaps, ...DATA.swapsAlt];
-const saved = new Set();
-const findSwap = n => ALL_SWAPS.find(s => s.name === n);
 
 function renderCards(list, target){
   const el = target || cardsEl;
@@ -2010,6 +2007,9 @@ function show(n){
   fills.forEach((f,i)=>{ f.style.width = i<=n ? '100%' : '0%'; });
   idx = n; done = false;
   phone.classList.toggle('at-start', n === 0);
+  phone.classList.toggle('has-next', n < slides.length - 1);
+  const backEl = document.getElementById('backBtn');
+  if(backEl) backEl.classList.toggle('on', n > 0);
   replay.classList.remove('on');
   if(slides[n].id === 's5') ringPlay();
   if(slides[n].id === 's6') renderSummary();
@@ -2025,6 +2025,8 @@ function finish(){
 let downX = 0, downY = 0;
 
 document.getElementById('learnWhy').addEventListener('click', e=>{ e.stopPropagation(); next(); });
+const nextBtn = document.getElementById('nextBtn');
+if(nextBtn) nextBtn.addEventListener('click', e=>{ e.stopPropagation(); next(); });
 
 /* recipe sheet on the summary */
 function openRecipeSheet(){ phone.classList.add('sheet-open'); }
@@ -2032,14 +2034,14 @@ function closeRecipeSheet(){ phone.classList.remove('sheet-open'); }
 document.getElementById('rsheet').addEventListener('pointerdown', e=>e.stopPropagation());
 document.getElementById('rscrim').addEventListener('click', e=>{ e.stopPropagation(); closeRecipeSheet(); });
 document.getElementById('rsheetClose').addEventListener('click', e=>{ e.stopPropagation(); closeRecipeSheet(); });
+const suggestionsBtn = document.getElementById('suggestionsBtn');
+if(suggestionsBtn) suggestionsBtn.addEventListener('click', e=>{ e.stopPropagation(); openRecipeSheet(); });
 const s1scroll = document.getElementById('s1scroll');
 const actBlock = document.getElementById('actBlock');
-const scrollHint = document.getElementById('scrollHint');
 const s1cta = document.querySelector('.s1-cta');
 s1scroll.addEventListener('pointerup', e=>e.stopPropagation());
 function revealSwaps(){
-  if(!actBlock || !scrollHint) return;      // simple headline mode has nothing to reveal
-  scrollHint.classList.add('gone');
+  if(!actBlock) return;      // simple headline mode has nothing to reveal
   actBlock.classList.add('seen');
   s1cta.classList.add('show');
   // measure after the hint collapses so the heading lands right below the status bar
@@ -2047,10 +2049,6 @@ function revealSwaps(){
     s1scroll.scrollTo({ top: Math.max(0, actBlock.offsetTop - 160), behavior: 'smooth' });
   });
 }
-const scrollDownBtn = document.getElementById('scrollDown');
-if(scrollDownBtn) scrollDownBtn.addEventListener('click', e=>{
-  e.stopPropagation(); revealSwaps();
-});
 
 s1scroll.addEventListener('scroll', ()=>{
   const y = s1scroll.scrollTop;
@@ -2122,6 +2120,9 @@ addEventListener('keydown', e=>{
   if(e.key==='ArrowRight' || e.key===' '){ e.preventDefault(); next(); }
   if(e.key==='ArrowLeft'){ prev(); }
 });
+
+const backBtn = document.getElementById('backBtn');
+if(backBtn) backBtn.addEventListener('click', e=>{ e.stopPropagation(); prev(); });
 
 show(0);
 
